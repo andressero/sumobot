@@ -1,0 +1,26 @@
+robot = robot()
+eyes = ultrasonicSensor()
+floor = colorSensor()
+
+function main() do
+    while (true) do
+
+        if(floor.isWhite()) do
+            robot.TurnAround()
+            continue
+        end
+
+        firstDistance = eyes.look()
+        if (firstDistance.isClose()) do
+            leftDistance = eyes.lookLeft()
+            rightDistance = eyes.lookRight()
+            if (leftDistance < firstDistance) do
+                robot.turnLeft()
+            end else if (rightDistance < firstDistance) do
+                robot.turnRight()
+            end
+        end
+        robot.move()
+    end
+end
+
