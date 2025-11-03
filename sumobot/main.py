@@ -30,13 +30,35 @@ color_sensor = ColorSensor(color_sensor_port)
 ultrasonic_sensor = UltrasonicSensor(ultrasonic_sensor_port)
 
 # Initialize robot
-robot = DriveBase(left_motor, right_motor, wheel_diameter, axle_track)
+robot = DriveBase(
+    left_motor, 
+    right_motor, 
+    wheel_diameter, 
+    axle_track
+)
+
+robot.settings(
+    straight_speed=200, 
+    straight_acceleration=500,
+    turn_rate=200,
+    turn_acceleration=500
+)
 
 def cycle():
     while True:
         if color_sensor.color() == Color.WHITE:
             robot.stop()
             robot.turn(1800)
+            robot.straight(200)
             continue
-        first_distance = ultrasonic_sensor.distance()
+
+        if ultrasonic_sensor.presence() and ultrasonic_sensor.distance() < 200:
+            robot.drive(500, 0)
+
+        else:
+            robot.drive(200, 0)
             
+        wait(10)
+
+
+cycle()
